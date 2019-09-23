@@ -1,25 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer } from 'react';
 
-function App() {
+import Header from './components/header';
+import Content from './components/content';
+
+import AppLangContext from './context/langContext';
+import langReducer from './context/langReducer';
+import { SET_APP_LANG } from './context/types';
+
+const App = () => {
+
+  const initialState = {
+    appLang: '',
+  };
+
+  const [state, dispatch] = useReducer(langReducer, initialState);
+
+  const setAppLang = (lang) => {
+    dispatch({
+      type: SET_APP_LANG,
+      payload: lang,
+    })
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppLangContext.Provider value={{
+      appLang: state.appLang,
+      setAppLang
+    }}>
+      <div className="App">
+        <Header />
+        <Content />
+      </div>
+    </AppLangContext.Provider>
   );
 }
 
